@@ -25,10 +25,5 @@ app.include_router(user.router)
 app.include_router(vote.router)
 
 
-# @app.get("/")
-# def fuck():
-#     return {"fuck": "this shit!!!"}
-
-
 if __name__ == "__main__":
     uvicorn.run("app.main:app", reload=True)
