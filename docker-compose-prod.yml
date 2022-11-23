@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+    api:
+        # pull image from Dockerhub
+        image: 041349323356667/fastapi-playground-app
+        ports:
+            - "80:8000"
+#         env_file:
+#             - ./.env
+        command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+        environment:
+            # database hostname is taken from service name below
+            - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_NAME=${DATABASE_NAME}
+            - SECRET_KEY=${SECRET_KEY}
+            - ALGORITHM=${ALGORITHM}
+            - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+        depends_on:
+            - postgres
+
+    postgres:
+        # use pre-build default postgres image
+        image: postgres
+        environment:
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+        volumes:
+            # indicate the directory inside a container which should persist on our local machine
+            - postgres-db:/var/lib/postgresql/data
+
+volumes:
+    # define named volume
+    postgres-db:
