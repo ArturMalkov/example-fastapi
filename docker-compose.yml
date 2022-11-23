@@ -8,9 +8,9 @@ services:
             - "8000:8000"
 #         env_file:
 #             - ./.env
-        volumes:
-            # to automatically sync the two folder in 'ro' - read-only - regime (so that container cannot change files)
-            - ./app:/usr/src/app:ro
+#         volumes:
+#             # to automatically sync the two folder in 'ro' - read-only - regime (so that container cannot change files)
+#             - ./app:/usr/src/app
         command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
         environment:
             # database hostname is taken from service name below
